@@ -27,3 +27,12 @@
     cursor: pointer;
     text-decoration: none;
 }
+
+.ingredients {
+    display: flex;
+    align-items: center;
+}
+
+.ingredients button {
+    margin: 0 0 0 10px;
+}

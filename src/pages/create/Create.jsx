@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useFetch } from "../../hooks/useFetch";
+import { useHistory } from "react-router-dom";
 
 import "./Create.css";
 
@@ -6,11 +8,38 @@ export default function Create() {
   const [title, setTitle] = useState("");
   const [method, setMethod] = useState("");
   const [cookingTime, setCookingTime] = useState("");
+  const [newIngredient, setNewIngredient] = useState("");
+  const [ingredients, setIngredients] = useState([]);
+  const ingredientInput = useRef(null)
+  const history = useHistory()
+
+
+  const { postData, data, error } = useFetch("http://localhost:3000/recipes", "POST");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(title, method, cookingTime);
+    postData({ title, ingredients, method, cookingTime: cookingTime + " minutes" })
+    console.log(title, method, cookingTime, ingredients);
   };
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    const eachIng = newIngredient.trim();
+
+    if (eachIng && !ingredients.includes(eachIng)) {
+      // This could also be setIngredients((prevIngredients) => [...prevIngredients, newIngredients]);
+      setIngredients((prevIngredients) => [...prevIngredients, eachIng]);
+    }
+    setNewIngredient("");
+    ingredientInput.current.focus()
+  };
+
+  // To redirect the user when json server gets the "ingredients" data response
+  // useEffect(() => {
+  //   if (data) {
+  //     history.push("/")
+  //   }
+  // }, []);
 
   return (
     <div className="create">
@@ -27,7 +56,25 @@ export default function Create() {
           />
         </label>
 
-        {/* Ingredient shows here */}
+        <label>
+          <span>Recipe ingredients</span>
+          <div className="ingredients">
+            <input
+              type="text"
+              onChange={(e) => setNewIngredient(e.target.value)}
+              value={newIngredient}
+              ref={ingredientInput}
+            />
+            <button className="btn" onClick={handleAdd}>
+              Add
+            </button>
+          </div>
+        </label>
+
+        {/* To output the inputed ingredients */}
+        <p>Current Ingredients: {ingredients.map(inputedIng => (
+          <em key={inputedIng}>{inputedIng},</em>
+        ))}</p>
 
         <label>
           <span>Recipe method:</span>
