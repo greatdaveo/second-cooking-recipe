@@ -10,7 +10,6 @@ export default function NavBar() {
         </Link>
 
         <Link to="/create">Create Recipe</Link>
-        {/* <Link to=""></Link> */}
       </nav>
     </div>
   );
