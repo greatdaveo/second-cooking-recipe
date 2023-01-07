@@ -10,16 +10,26 @@ export default function Create() {
   const [cookingTime, setCookingTime] = useState("");
   const [newIngredient, setNewIngredient] = useState("");
   const [ingredients, setIngredients] = useState([]);
-  const ingredientInput = useRef(null)
-  const history = useHistory()
+  const ingredientInput = useRef(null);
+  const history = useHistory();
 
-
-  const { postData, data, error } = useFetch("http://localhost:3000/recipes", "POST");
+  const { postData, data, error } = useFetch(
+    "http://localhost:3000/recipes",
+    "POST"
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    postData({ title, ingredients, method, cookingTime: cookingTime + " minutes" })
+    postData({
+      title,
+      ingredients,
+      method,
+      cookingTime: cookingTime + " minutes",
+    });
     console.log(title, method, cookingTime, ingredients);
+
+    // To redirect the user when json server gets the "ingredients" data response.
+    history.push("/");
   };
 
   const handleAdd = (e) => {
@@ -31,7 +41,7 @@ export default function Create() {
       setIngredients((prevIngredients) => [...prevIngredients, eachIng]);
     }
     setNewIngredient("");
-    ingredientInput.current.focus()
+    ingredientInput.current.focus();
   };
 
   // To redirect the user when json server gets the "ingredients" data response
@@ -72,9 +82,12 @@ export default function Create() {
         </label>
 
         {/* To output the inputed ingredients */}
-        <p>Current Ingredients: {ingredients.map(inputedIng => (
-          <em key={inputedIng}>{inputedIng},</em>
-        ))}</p>
+        <p>
+          Current Ingredients:{" "}
+          {ingredients.map((inputedIng) => (
+            <em key={inputedIng}>{inputedIng},</em>
+          ))}
+        </p>
 
         <label>
           <span>Recipe method:</span>
