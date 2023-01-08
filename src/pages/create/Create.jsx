@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useFetch } from "../../hooks/useFetch";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./Create.css";
 
@@ -11,7 +11,7 @@ export default function Create() {
   const [newIngredient, setNewIngredient] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const ingredientInput = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { postData, data, error } = useFetch(
     "http://localhost:3000/recipes",
@@ -29,7 +29,7 @@ export default function Create() {
     console.log(title, method, cookingTime, ingredients);
 
     // To redirect the user when json server gets the "ingredients" data response.
-    history.push("/");
+    // navigate.push("/");
   };
 
   const handleAdd = (e) => {
@@ -45,11 +45,11 @@ export default function Create() {
   };
 
   // To redirect the user when json server gets the "ingredients" data response
-  // useEffect(() => {
-  //   if (data) {
-  //     history.push("/")
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (data) {
+      navigate("/")
+    }
+  }, [data, navigate]);
 
   return (
     <div className="create">
